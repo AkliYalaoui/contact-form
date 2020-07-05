@@ -7,6 +7,9 @@
   padding: 0;
   box-sizing: border-box;
 }
+body{
+  background-color: #F1F1F1;
+}
 .container{
   max-width: 600px;
   min-width: 300px;
@@ -60,4 +63,30 @@
   top: -40px;
   left: 10px;
   color: #FFF;
+}
+/*  alert for error  */
+.alert{
+  background-color: #F2DEDE;
+  color : #A94442;
+  border-color: #EBCCD1;
+  padding: 20px;
+  border-radius: 7px;
+  margin: 10px;
+  text-align: center;
+  font-size: 18px;
+  position: relative;
+}
+.close{
+ position: absolute;
+ top: 10px;
+ right: 10px;
+ font-size: 18px;
+ color: red;
+ cursor: pointer;
+}
+.display-none{
+  display: none ;
+}
+.display-block{
+  display: block ;
 }

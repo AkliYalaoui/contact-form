@@ -13,17 +13,17 @@
           $formErrors = array();
 
           if(strlen($user) < 4):
-            $formErrors[] = 'username must contain at least 4 characters';
+            $formErrors[] = '* username must contain at least <strong>4</strong> characters';
           endif;
 
           if(strlen($user) > 20):
-            $formErrors[] = 'max character of username is 20';
+            $formErrors[] = '* max character of username is <strong>20</strong>';
           endif;
 
           if(strlen($msg) < 10):
-            $formErrors[] = 'message must contain at least 10 characters';
+            $formErrors[] = '* message must contain at least <strong>10</strong> characters';
           endif;
-          
+
     endif;
 ?>
 <!DOCTYPE html>
@@ -40,17 +40,20 @@
   <body>
 
      <!--  start form -->
-      <div class="container">
+      <div id="app" class="container">
           <h1>Contact Us</h1>
-          <div class="errors">
-              <?php
-                  if(isset($formErrors)):
-                      foreach ($formErrors as $error):
-                         echo $error . '<br/>';
-                      endforeach;
-                  endif;
-              ?>
-         </div>
+          <?php if(isset($formErrors)): ?>
+              <div class="alert" v-bind:class="[closed]">
+                 <button @click="closeAlert">
+                      <i class="fas fa-times close"></i>
+                 </button>
+                 <?php
+                          foreach ($formErrors as $error):
+                             echo $error . '<br/>';
+                          endforeach;
+                   ?>
+              </div>
+           <?php  endif;?>
           <form class="contact-form" action="<?php echo $_SERVER['PHP_SELF']; ?>" method="POST">
               <input type="text" name="username" autocomplete="off" placeholder="Type Your Username">
               <i class="fa fa-user fa-fw"></i>
@@ -66,5 +69,6 @@
      <!--  end form -->
 
      <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+     <script src="js/main.js"></script>
   </body>
 </html>
