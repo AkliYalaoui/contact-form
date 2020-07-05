@@ -42,7 +42,7 @@ body{
   width: 100%;
   outline: none;
   border: 1px solid rgba(0,0,0,.1);
-  padding: 10px;
+  padding: 17px;
 }
 .contact-form input[type="submit"]{
   background-color: #5cb85c;
@@ -64,6 +64,16 @@ body{
   left: 10px;
   color: #FFF;
 }
+.form-group{
+  position: relative;
+}
+.form-group .asterix{
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  color: #de8080;
+  font-size: 20px;
+}
 /*  alert for error  */
 .alert{
   background-color: #F2DEDE;
@@ -75,6 +85,11 @@ body{
   text-align: center;
   font-size: 18px;
   position: relative;
+}
+.custom-alert{
+  margin-top: -20px;
+  padding: 5px !important;
+  font-size: 15px;
 }
 .close{
  position: absolute;

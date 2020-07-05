@@ -4,20 +4,16 @@
     if($_SERVER['REQUEST_METHOD'] === 'POST'):
 
           // assign variables
-          $user = $_POST['username'];
-          $mail = $_POST['email'];
-          $cell = $_POST['mobile'];
-          $msg  = $_POST['message'];
+          $user = filter_var($_POST['username'],FILTER_SANITIZE_STRING);
+          $mail = filter_var($_POST['email'],FILTER_SANITIZE_EMAIL);
+          $cell = filter_var($_POST['mobile'],FILTER_SANITIZE_NUMBER_INT);
+          $msg  = filter_var($_POST['message'],FILTER_SANITIZE_STRING);
 
           // creating  array that contain all errors
           $formErrors = array();
 
           if(strlen($user) < 4):
             $formErrors[] = '* username must contain at least <strong>4</strong> characters';
-          endif;
-
-          if(strlen($user) > 20):
-            $formErrors[] = '* max character of username is <strong>20</strong>';
           endif;
 
           if(strlen($msg) < 10):
@@ -42,7 +38,7 @@
      <!--  start form -->
       <div id="app" class="container">
           <h1>Contact Us</h1>
-          <?php if(isset($formErrors)): ?>
+          <?php if(isset($formErrors) && !empty($formErrors)): ?>
               <div class="alert" v-bind:class="[closed]">
                  <button @click="closeAlert">
                       <i class="fas fa-times close"></i>
@@ -55,13 +51,49 @@
               </div>
            <?php  endif;?>
           <form class="contact-form" action="<?php echo $_SERVER['PHP_SELF']; ?>" method="POST">
-              <input type="text" name="username" autocomplete="off" placeholder="Type Your Username">
-              <i class="fa fa-user fa-fw"></i>
-              <input type="email" name="email"  autocomplete="off" placeholder="Please Type a Valid Email">
-              <i class="fas fa-envelope fa-fw"></i>
-              <input type="text" name="mobile"  autocomplete="off" placeholder="Type Your Cell phone">
+
+              <div class="form-group">
+                <input @blur="showError('username')"
+                       ref = "username"
+                       type="text"
+                       name="username"
+                       autocomplete="off"
+                       placeholder="Type Your Username"
+                       value="<?php if(isset($user)): echo $user; endif;?>">
+                <i class="fa fa-user fa-fw"></i>
+                <span class="asterix">*</span>
+                <div class="alert custom-alert" v-bind:class="[show]">
+                    username must contain at least <strong>4</strong> characters
+                </div>
+              </div>
+
+              <div class="form-group">
+                <input type="email"
+                       name="email"
+                       autocomplete="off"
+                       placeholder="Please Type a Valid Email"
+                       value="<?php if(isset($mail)): echo $mail; endif;?>">
+                <i class="fas fa-envelope fa-fw"></i>
+                <span class="asterix">*</span>
+              </div>
+
+              <input
+                    type="text"
+                    name="mobile"
+                    autocomplete="off"
+                    placeholder="Type Your Cell phone"
+                    value="<?php if(isset($cell)): echo $cell; endif;?>">
               <i class="fas fa-phone fa-fw"></i>
-              <textarea name="message" placeholder="Your Message !"></textarea>
+
+              <div class="form-group">
+                  <textarea
+                              name="message"
+                              placeholder="Your Message !">
+                                <?php if(isset($msg)): echo $msg; endif;?>
+                              </textarea>
+                  <span class="asterix">*</span>
+              </div>
+
               <input type="submit"  value="Send Message">
               <i class="fas fa-paper-plane fa-fw"></i>
           </form>
