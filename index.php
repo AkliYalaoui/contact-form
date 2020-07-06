@@ -15,11 +15,13 @@
           if(strlen($user) < 4):
             $formErrors[] = '* username must contain at least <strong>4</strong> characters';
           endif;
-
+          if(strlen($mail) == 0):
+             $formErrors[] = '*   email cannot be <strong>empty</strong>';
+          endif;
           if(strlen($msg) < 10):
             $formErrors[] = '* message must contain at least <strong>10</strong> characters';
           endif;
-
+    
     endif;
 ?>
 <!DOCTYPE html>
@@ -50,31 +52,39 @@
                    ?>
               </div>
            <?php  endif;?>
-          <form class="contact-form" action="<?php echo $_SERVER['PHP_SELF']; ?>" method="POST">
+          <form  v-on:submit="clickable" class="contact-form" action="<?php echo $_SERVER['PHP_SELF']; ?>" method="POST">
 
               <div class="form-group">
                 <input @blur="showError('username')"
                        ref = "username"
+                       v-bind:class="[borderUser]"
                        type="text"
                        name="username"
                        autocomplete="off"
                        placeholder="Type Your Username"
                        value="<?php if(isset($user)): echo $user; endif;?>">
                 <i class="fa fa-user fa-fw"></i>
-                <span class="asterix">*</span>
-                <div class="alert custom-alert" v-bind:class="[show]">
+                <span class="asterix" v-bind:class="[asterixUser]">*</span>
+                <div class="alert custom-alert" v-bind:class="[showUser]">
                     username must contain at least <strong>4</strong> characters
                 </div>
               </div>
 
               <div class="form-group">
-                <input type="email"
+                <input
+                      @blur="showError('email')"
+                       ref = "email"
+                       v-bind:class="[borderMail]"
+                       type="email"
                        name="email"
                        autocomplete="off"
                        placeholder="Please Type a Valid Email"
                        value="<?php if(isset($mail)): echo $mail; endif;?>">
                 <i class="fas fa-envelope fa-fw"></i>
-                <span class="asterix">*</span>
+                <span class="asterix" v-bind:class="[asterixMail]">*</span>
+                <div class="alert custom-alert" v-bind:class="[showMail]">
+                  email cannot be <strong>empty</strong>
+                </div>
               </div>
 
               <input
@@ -87,14 +97,21 @@
 
               <div class="form-group">
                   <textarea
+                              @blur="showError('msg')"
+                              ref = "msg"
+                              v-bind:class="[borderMsg]"
                               name="message"
                               placeholder="Your Message !">
                                 <?php if(isset($msg)): echo $msg; endif;?>
                               </textarea>
-                  <span class="asterix">*</span>
+                  <span class="asterix" v-bind:class="[asterixMsg]" >*</span>
+                  <div class="alert custom-alert" v-bind:class="[showMsg]">
+                     message must contain at least <strong>10</strong> characters
+                  </div>
               </div>
 
-              <input type="submit"  value="Send Message">
+              <input   type="submit"
+                       value="Send Message">
               <i class="fas fa-paper-plane fa-fw"></i>
           </form>
       </div>

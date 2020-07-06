@@ -103,5 +103,11 @@ body{
   display: none ;
 }
 .display-block{
-  display: block ;
+  display: block;
+}
+.red{
+  border : 1px solid #f00 !important;
+}
+.green{
+  border : 1px solid #0f0 !important;
 }
