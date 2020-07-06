@@ -43,6 +43,7 @@ body{
   outline: none;
   border: 1px solid rgba(0,0,0,.1);
   padding: 17px;
+  margin-bottom: 20px;
 }
 .contact-form input[type="submit"]{
   background-color: #5cb85c;
@@ -51,6 +52,7 @@ body{
   font-size: 18px;
   cursor: pointer;
   width: 200px;
+  margin-top: 15px;
 }
 .contact-form input:not([type="submit"]) +i{
   position: relative;
@@ -112,7 +114,8 @@ body{
   border : 1px solid #0f0 !important;
 }
 .success{
-  background-color: #080;
+  background-color: #5cb85c;
+  border-color: #4cae4c;
   color :#FFF;
   font-size: 18px;
 }

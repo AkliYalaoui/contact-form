@@ -1,6 +1,5 @@
 <?php
     // check if user coming from a request
-
     if($_SERVER['REQUEST_METHOD'] === 'POST'):
 
           // assign variables
@@ -21,17 +20,37 @@
           if(strlen($msg) < 10):
             $formErrors[] = '* message must contain at least <strong>10</strong> characters';
           endif;
-          // if no error send the Email
-          $headers = 'From: '.$mail. '\r\n';
+          // if no error check the recaptcha then send the Email
           if(empty($formErrors)):
-            // TO SUBJECT MESSAGE HEADERS PARAMERTERS
-              mail('akliyalaoui16@gmail.com','Contact Form',$msg,$headers);
-              $user = "";
-              $mail = "";
-              $cell = "";
-              $msg  = "";
-              $success = "We have recieved your message ";
-          endif;
+             //recaptcha secret key
+              $secret = '6Le1Vq4ZAAAAAFsCjeJXxg7ZYnbf8mr1XHYlnLLb';
+              //recaptcha response
+              $response = $_POST['g-recaptcha-response'];
+              // user ip : optional
+              $userip = $_SERVER['REMOTE_ADDR'];
+              // send the data to google to check weather user is human or a bot
+              $url ="https://www.google.com/recaptcha/api/siteverify?secret=$secret&response=$response&remoteip=$userip";
+              //API REQUEST & API RESPONSE
+              $human = file_get_contents($url);
+              // decode json
+              $human = json_decode($human);
+              //check if user is a human
+              if($human->success):
+                  //sending the email
+                  $headers = 'From: '.$mail. '\r\n';
+                  //now i'm using php mail function , this will be updated to phpMailer
+                  mail('akliyalaoui16@gmail.com', 'Contact form', $msg, $headers);
+                  // remove all data from the form after sending the mail
+                  $user = "";
+                  $mail = "";
+                  $cell = "";
+                  $msg  = "";
+                  $success = "We have recieved your message ";
+              else:
+                 $errorRec = 'Cannot send the email , please verify the recaptcha';
+              endif;
+
+        endif;
     endif;
 ?>
 <!DOCTYPE html>
@@ -44,6 +63,7 @@
     <link rel="stylesheet" href="css/all.css">
     <link rel="stylesheet" href="css/contact.css">
     <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@600&display=swap" rel="stylesheet">
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
   </head>
   <body>
 
@@ -63,7 +83,10 @@
               </div>
            <?php  endif;?>
            <?php if(isset($success)): ?>
-                <div class="alert success"><?php echo $success; ?></div>  
+                <div class="alert success"><?php echo $success; ?></div>
+           <?php endif; ?>
+           <?php if(isset($errorRec)): ?>
+                <div class="alert"><?php echo $errorRec; ?></div>
            <?php endif; ?>
           <form  v-on:submit="clickable" class="contact-form" action="<?php echo $_SERVER['PHP_SELF']; ?>" method="POST">
 
@@ -122,7 +145,7 @@
                      message must contain at least <strong>10</strong> characters
                   </div>
               </div>
-
+               <div class="g-recaptcha" data-sitekey="6Le1Vq4ZAAAAABFtls_Y02zWgYtQbp5YCCGT3cdP"></div>
               <input   type="submit"
                        value="Send Message">
               <i class="fas fa-paper-plane fa-fw"></i>
