@@ -21,7 +21,17 @@
           if(strlen($msg) < 10):
             $formErrors[] = '* message must contain at least <strong>10</strong> characters';
           endif;
-    
+          // if no error send the Email
+          $headers = 'From: '.$mail. '\r\n';
+          if(empty($formErrors)):
+            // TO SUBJECT MESSAGE HEADERS PARAMERTERS
+              mail('akliyalaoui16@gmail.com','Contact Form',$msg,$headers);
+              $user = "";
+              $mail = "";
+              $cell = "";
+              $msg  = "";
+              $success = "We have recieved your message ";
+          endif;
     endif;
 ?>
 <!DOCTYPE html>
@@ -52,6 +62,9 @@
                    ?>
               </div>
            <?php  endif;?>
+           <?php if(isset($success)): ?>
+                <div class="alert success"><?php echo $success; ?></div>  
+           <?php endif; ?>
           <form  v-on:submit="clickable" class="contact-form" action="<?php echo $_SERVER['PHP_SELF']; ?>" method="POST">
 
               <div class="form-group">
