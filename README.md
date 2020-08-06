@@ -1,2 +1,2 @@
 # contact-form
-contact form made in php/vue
+contact form made with php/js
