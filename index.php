@@ -11,8 +11,8 @@
           // creating  array that contain all errors
           $formErrors = array();
 
-          if(strlen($user) < 4):
-            $formErrors[] = '* username must contain at least <strong>4</strong> characters';
+          if(strlen($user) < 5):
+            $formErrors[] = '* username must contain at least <strong>5</strong> characters';
           endif;
           if(strlen($mail) == 0):
              $formErrors[] = '*   email cannot be <strong>empty</strong>';
@@ -68,11 +68,11 @@
   <body>
 
      <!--  start form -->
-      <div id="app" class="container">
+      <div class="container">
           <h1>Contact Us</h1>
           <?php if(isset($formErrors) && !empty($formErrors)): ?>
-              <div class="alert" v-bind:class="[closed]">
-                 <button @click="closeAlert">
+              <div class="alert">
+                 <button id="close">
                       <i class="fas fa-times close"></i>
                  </button>
                  <?php
@@ -88,61 +88,44 @@
            <?php if(isset($errorRec)): ?>
                 <div class="alert"><?php echo $errorRec; ?></div>
            <?php endif; ?>
-          <form  v-on:submit="clickable" class="contact-form" action="<?php echo $_SERVER['PHP_SELF']; ?>" method="POST">
+          <form class="contact-form" action="<?php echo $_SERVER['PHP_SELF']; ?>" method="POST">
 
               <div class="form-group">
-                <input @blur="showError('username')"
-                       ref = "username"
-                       v-bind:class="[borderUser]"
-                       type="text"
-                       name="username"
-                       autocomplete="off"
-                       placeholder="Type Your Username"
-                       value="<?php if(isset($user)): echo $user; endif;?>">
-                <i class="fa fa-user fa-fw"></i>
-                <span class="asterix" v-bind:class="[asterixUser]">*</span>
-                <div class="alert custom-alert" v-bind:class="[showUser]">
-                    username must contain at least <strong>4</strong> characters
-                </div>
+                  <input  data-name='username' required pattern=".{5,}" title="username must contain at least 5 characters" type="text" name="username" autocomplete="off" placeholder="Type Your Username"
+                          value="<?php if(isset($user)): echo $user; endif;?>">
+                  <i class="fa fa-user fa-fw"></i>
+                  <div data-error="username">
+                      <span class="asterix">*</span>
+                      <div class="alert custom-alert">
+                          username must contain at least <strong>5</strong> characters
+                      </div>
+                  </div>
               </div>
 
               <div class="form-group">
-                <input
-                      @blur="showError('email')"
-                       ref = "email"
-                       v-bind:class="[borderMail]"
-                       type="email"
-                       name="email"
-                       autocomplete="off"
-                       placeholder="Please Type a Valid Email"
+                <input data-name='email' required type="email" name="email" autocomplete="off" placeholder="Please Type a Valid Email"
                        value="<?php if(isset($mail)): echo $mail; endif;?>">
                 <i class="fas fa-envelope fa-fw"></i>
-                <span class="asterix" v-bind:class="[asterixMail]">*</span>
-                <div class="alert custom-alert" v-bind:class="[showMail]">
-                  email cannot be <strong>empty</strong>
+                <div data-error="email">
+                  <span class="asterix">*</span>
+                  <div class="alert custom-alert">
+                    email cannot be <strong>empty</strong>
+                  </div>
                 </div>
               </div>
 
               <input
-                    type="text"
-                    name="mobile"
-                    autocomplete="off"
-                    placeholder="Type Your Cell phone"
+                    type="text" name="mobile" autocomplete="off" placeholder="Type Your Cell phone"
                     value="<?php if(isset($cell)): echo $cell; endif;?>">
               <i class="fas fa-phone fa-fw"></i>
 
               <div class="form-group">
-                  <textarea
-                              @blur="showError('msg')"
-                              ref = "msg"
-                              v-bind:class="[borderMsg]"
-                              name="message"
-                              placeholder="Your Message !">
-                                <?php if(isset($msg)): echo $msg; endif;?>
-                              </textarea>
-                  <span class="asterix" v-bind:class="[asterixMsg]" >*</span>
-                  <div class="alert custom-alert" v-bind:class="[showMsg]">
-                     message must contain at least <strong>10</strong> characters
+                  <textarea   data-name='msg' required name="message" placeholder="Your Message !"><?php if(isset($msg)): echo $msg; endif;?></textarea>
+                  <div data-error="msg">
+                      <span class="asterix" >*</span>
+                      <div class="alert custom-alert">
+                         message must contain at least <strong>10</strong> characters
+                      </div>
                   </div>
               </div>
                <div class="g-recaptcha" data-sitekey="6Le1Vq4ZAAAAABFtls_Y02zWgYtQbp5YCCGT3cdP"></div>
@@ -152,8 +135,6 @@
           </form>
       </div>
      <!--  end form -->
-
-     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
      <script src="js/main.js"></script>
   </body>
 </html>
